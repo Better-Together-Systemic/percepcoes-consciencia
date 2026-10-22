@@ -1,0 +1,28 @@
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+.label {
+  padding: 5px 14px;
+  border: 1px solid color-mix(in srgb, var(--divider-color) 30%, transparent);
+  border-radius: var(--radius-sm);
+  color: var(--divider-color);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  .label {
+    white-space: normal;
+    text-align: center;
+  }
+}

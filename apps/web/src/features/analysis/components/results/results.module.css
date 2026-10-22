@@ -1,0 +1,461 @@
+.results {
+  animation: fade-up 0.5s ease both;
+}
+
+.reflection {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.85;
+  color: rgba(232, 228, 220, 0.78);
+}
+
+.description {
+  margin-bottom: 18px;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.8;
+  color: rgba(232, 228, 220, 0.58);
+}
+
+/* Lista com marcador colorido (feridas múltiplas) */
+.dotList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dotList li {
+  position: relative;
+  padding-left: 24px;
+}
+.dotList li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot);
+  opacity: 0.8;
+}
+.dotTitle {
+  margin-bottom: 4px;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--dot);
+}
+.dotText {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.75;
+  color: rgba(232, 228, 220, 0.55);
+}
+
+/* Pílulas de sintomas / raízes */
+.pills {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pills li {
+  padding: 4px 11px;
+  border: 1px solid color-mix(in srgb, var(--lang-color, var(--panel-accent)) 28%, transparent);
+  border-radius: var(--radius-sm);
+  color: var(--lang-color, var(--panel-accent));
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.root {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 2px solid color-mix(in srgb, var(--lang-color, var(--panel-accent)) 45%, transparent);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: rgba(232, 228, 220, 0.5);
+}
+.rootLabel {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--panel-accent);
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-style: normal;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.inline {
+  display: inline-flex;
+}
+.indented {
+  margin-left: 16px;
+}
+
+/* Investigação */
+.intro,
+.introGreen {
+  margin: 4px 0 22px;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.7;
+}
+.intro {
+  color: rgba(184, 168, 216, 0.55);
+}
+.introGreen {
+  color: rgba(168, 200, 160, 0.6);
+}
+
+.questions {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.question {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px 20px;
+  background: rgba(184, 168, 216, 0.04);
+  border: 1px solid rgba(184, 168, 216, 0.18);
+  border-left: 3px solid rgba(184, 168, 216, 0.55);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.numeral {
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  line-height: 1;
+  color: rgba(184, 168, 216, 0.4);
+}
+.questionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.questionTheme {
+  color: var(--color-lilac);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.questionSub {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(184, 168, 216, 0.6);
+}
+.questionText {
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: rgba(232, 228, 220, 0.88);
+}
+
+/* Linguagens do amor */
+.language + .language {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.languageName {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 300;
+}
+.languageName::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lang-color);
+}
+.languagePhrase {
+  margin-bottom: 6px;
+  padding-left: 16px;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: rgba(232, 228, 220, 0.65);
+}
+.language .pills {
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+/* Frases */
+.phrases {
+  margin-top: 30px;
+}
+.category {
+  margin-bottom: 30px;
+}
+.phrase {
+  position: relative;
+  margin-bottom: 12px;
+  padding: 22px 96px 22px 26px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  transition: border-color 0.3s;
+}
+.copied {
+  border-left-color: var(--color-success);
+}
+.phraseText {
+  font-family: var(--font-serif);
+  font-size: 1.28rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.6;
+}
+.phraseMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+.author {
+  color: rgba(201, 169, 110, 0.6);
+  font-size: 0.72rem;
+  font-style: italic;
+}
+.context {
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+.copyButton {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  padding: 5px 9px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.copyButton:hover {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+/* Exercícios */
+.exercises {
+  margin-top: 28px;
+}
+.exercise {
+  --ex-color: 168, 200, 160;
+}
+.exercise + .exercise {
+  margin-top: 14px;
+}
+.sensorial {
+  --ex-color: 200, 168, 216;
+}
+.sensorial > :first-child {
+  margin-top: 18px;
+  margin-bottom: 10px;
+}
+
+.exerciseToggle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(var(--ex-color), 0.03);
+  border: 1px solid rgba(var(--ex-color), 0.12);
+  border-left: 3px solid rgb(var(--ex-color));
+  border-radius: 0 var(--radius) var(--radius) 0;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    border-color 0.25s;
+}
+.exerciseToggle[aria-expanded='true'] {
+  background: rgba(var(--ex-color), 0.06);
+  border-color: rgba(var(--ex-color), 0.22);
+  border-left-color: rgb(var(--ex-color));
+}
+.exerciseIcon {
+  flex-shrink: 0;
+  color: rgb(var(--ex-color));
+  opacity: 0.7;
+}
+.exerciseTitle {
+  flex: 1;
+  font-family: var(--font-serif);
+  font-size: 1.18rem;
+  font-weight: 300;
+  line-height: 1.3;
+}
+.chevron {
+  flex-shrink: 0;
+  color: rgb(var(--ex-color));
+  font-size: 0.75rem;
+  opacity: 0.6;
+  transition: transform 0.25s;
+}
+.exerciseToggle[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+.exerciseBody {
+  padding: 20px 24px 22px;
+  background: rgba(var(--ex-color), 0.04);
+  border: 1px solid rgba(var(--ex-color), 0.12);
+  border-top: none;
+  border-left: 3px solid rgba(var(--ex-color), 0.3);
+  border-radius: 0 0 var(--radius) 0;
+  animation: fade-up 0.3s ease both;
+}
+.exerciseText {
+  margin-bottom: 16px;
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
+  line-height: 1.85;
+  color: rgba(232, 228, 220, 0.82);
+  white-space: pre-line;
+}
+.intention {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(var(--ex-color), 0.06);
+  border: 1px solid rgba(var(--ex-color), 0.1);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: rgba(var(--ex-color), 0.8);
+}
+.intentionLabel {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: rgb(var(--ex-color));
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-style: normal;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Músicas */
+.musicRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 4px;
+}
+.music {
+  flex: 1;
+  min-width: 220px;
+}
+.music + .music {
+  padding-left: 24px;
+  border-left: 1px solid color-mix(in srgb, var(--color-violet) 15%, transparent);
+}
+.musicLabel {
+  margin-bottom: 8px;
+  color: var(--color-violet);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.musicTitle {
+  margin-bottom: 2px;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+}
+.musicArtist {
+  margin-bottom: 10px;
+  color: var(--color-violet);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+.musicReason {
+  margin-bottom: 12px;
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: rgba(232, 228, 220, 0.5);
+}
+.musicLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: rgba(155, 143, 200, 0.07);
+  border: 1px solid color-mix(in srgb, var(--color-violet) 25%, transparent);
+  border-radius: var(--radius);
+  color: var(--color-violet);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.musicLink:hover {
+  background: rgba(155, 143, 200, 0.14);
+}
+.play {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--color-violet);
+  border-radius: 50%;
+  background: rgba(155, 143, 200, 0.12);
+}
+
+@media (max-width: 520px) {
+  .phrase {
+    padding: 20px 18px 52px;
+  }
+  .copyButton {
+    top: auto;
+    bottom: 12px;
+    transform: none;
+  }
+  .music + .music {
+    padding-left: 0;
+    border-left: 0;
+  }
+}

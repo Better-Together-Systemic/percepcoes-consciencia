@@ -1,0 +1,51 @@
+.brand {
+  text-align: center;
+}
+
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.lineLeft,
+.lineRight {
+  width: 44px;
+  height: 1px;
+}
+.lineLeft {
+  background: linear-gradient(90deg, transparent, var(--color-gold));
+}
+.lineRight {
+  background: linear-gradient(90deg, var(--color-gold), transparent);
+}
+.diamond {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--color-gold);
+  transform: rotate(45deg);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 1.15;
+}
+.title em {
+  color: var(--color-gold);
+}
+.md {
+  font-size: 2rem;
+}
+.lg {
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+}
+
+.subtitle {
+  margin-top: 10px;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}

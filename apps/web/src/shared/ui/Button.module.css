@@ -1,0 +1,50 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: transparent;
+  border: 1px solid var(--btn-color);
+  color: var(--btn-color);
+  border-radius: var(--radius);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    opacity 0.2s;
+}
+
+.button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--btn-color) 8%, transparent);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.primary {
+  --btn-color: var(--color-gold);
+}
+.danger {
+  --btn-color: var(--color-danger);
+}
+
+.sm {
+  font-size: 0.7rem;
+  padding: 7px 14px;
+}
+.md {
+  font-size: 0.8rem;
+  padding: 13px 20px;
+}
+.lg {
+  font-size: 0.8rem;
+  padding: 17px;
+  letter-spacing: 0.2em;
+}
+
+.block {
+  width: 100%;
+}

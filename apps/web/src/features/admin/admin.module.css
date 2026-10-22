@@ -1,0 +1,86 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 740px;
+}
+
+.heading {
+  margin-bottom: 10px;
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 300;
+}
+.heading em {
+  color: var(--color-gold);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: stretch;
+}
+.grow {
+  flex: 1;
+  min-width: 150px;
+}
+
+.feedback {
+  margin-top: 10px;
+  min-height: 1.2em;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+  font-size: 0.92rem;
+}
+.actions {
+  text-align: right;
+}
+.muted {
+  color: var(--color-muted);
+  font-size: 0.86rem;
+}
+
+.badge {
+  padding: 3px 8px;
+  border: 1px solid;
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.admin {
+  color: var(--color-gold);
+  background: color-mix(in srgb, var(--color-gold) 15%, transparent);
+  border-color: color-mix(in srgb, var(--color-gold) 30%, transparent);
+}
+.user {
+  color: var(--color-blue);
+  background: color-mix(in srgb, var(--color-blue) 12%, transparent);
+  border-color: color-mix(in srgb, var(--color-blue) 25%, transparent);
+}
+
+@media (max-width: 520px) {
+  .table th:nth-child(3),
+  .table td:nth-child(3) {
+    display: none;
+  }
+}

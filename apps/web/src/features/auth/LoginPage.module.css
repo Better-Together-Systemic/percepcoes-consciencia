@@ -1,0 +1,44 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.box {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 48px 40px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.box::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 36px;
+}
+
+.error {
+  min-height: 20px;
+  margin: 12px 0 14px;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .box {
+    padding: 36px 22px;
+  }
+}

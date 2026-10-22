@@ -1,0 +1,10 @@
+.alert {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.error {
+  color: var(--color-danger-soft);
+}
+.success {
+  color: var(--color-success);
+}

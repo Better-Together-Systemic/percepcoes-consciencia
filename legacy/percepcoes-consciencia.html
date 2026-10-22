@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Percepções & Consciência · Visão Sistêmica</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d0d0f;color:#e8e4dc;font-family:'Jost','Trebuchet MS',sans-serif;font-weight:300;min-height:100vh}
+input::placeholder,textarea::placeholder{color:#7a7a8a}
+textarea::placeholder{font-style:italic}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp 0.5s ease forwards}
+.ex-body{animation:fadeUp 0.3s ease forwards}
+.tag-btn:hover{border-color:#c9a96e!important;color:#c9a96e!important}
+.lng-btn:hover:not(:disabled){border-color:rgba(201,169,110,0.35)!important}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#13131a}
+::-webkit-scrollbar-thumb{background:#2a2a38;border-radius:3px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const DEFAULT_USERS = [
+  { user: "bettertogether", pass: "Better3010", role: "admin" },
+  { user: "elisimoes", pass: "Eli@ne", role: "user" },
+  { user: "brunomarinmota", pass: "Brun007!", role: "user" },
+];
+
+const DINAMICAS = [
+  { nome: "Vínculo de amor interrompido", desc: "Quando o amor na primeira infância foi insuficiente ou houve ruptura. Pode ser pessoal ou transgeracional." },
+  { nome: "Lealdade invisível", desc: "Antes de sermos felizes, somos leais. Repetimos destinos por amor inconsciente." },
+  { nome: "Exclusão de membros do sistema", desc: "Quando alguém foi esquecido, julgado ou retirado do pertencimento." },
+  { nome: "Compensações inconscientes", desc: "Movimentos de culpa, expiação ou tentativa de equilibrar destinos difíceis." },
+  { nome: "Repetição de destinos traumáticos", desc: "Memórias epigenéticas que buscam resolução através dos descendentes." },
+  { nome: "Memórias transgeracionais ativadas", desc: "Quando sofrimentos antigos emergem de forma desproporcional ao fato atual." },
+  { nome: "Sintoma como mensageiro sistêmico", desc: "O corpo fala aquilo que o sistema silenciou." },
+  { nome: "Desordens hierárquicas", desc: "Quando filhos assumem lugares que não lhes pertencem." },
+  { nome: "Interrupção do movimento amoroso", desc: "Bloqueio no fluxo do dar e receber." },
+  { nome: "Identificações inconscientes com antepassados", desc: '"Eu por você." Carregar o que não começou em mim.' },
+];
+
+const LEIS = [
+  { nome: "Pertencimento", desc: "Todos têm direito a pertencer. Quando alguém é excluído surge uma dinâmica de repetição ou identificação." },
+  { nome: "Ordem (Hierarquia)", desc: "Quem veio antes tem precedência. Quando um filho assume lugar de pai surge uma dinâmica de inversão." },
+  { nome: "Equilíbrio (Dar e Receber)", desc: "Principalmente entre adultos. Quando há desequilíbrio surgem culpas, compensações, rupturas." },
+];
+
+const FERIDAS = [
+  { nome: "Rejeição", desc: "Ferida profunda de não ser aceito, de sentir que sua presença é indesejada ou que não há lugar para você no sistema.", cor: "#c8a0c8", bg: "linear-gradient(135deg,#1a0d1f,#150a1a)", bgLabel: "#1a0d1f" },
+  { nome: "Abandono", desc: "Ferida do ser deixado — física ou emocionalmente. O vínculo foi interrompido antes do tempo, deixando um vazio de pertencimento.", cor: "#8fb4c8", bg: "linear-gradient(135deg,#0d1520,#0a1018)", bgLabel: "#0d1520" },
+  { nome: "Humilhação", desc: "Ferida de ter sido envergonhado, diminuído ou exposto. O valor próprio foi atacado por quem deveria proteger.", cor: "#c8b87a", bg: "linear-gradient(135deg,#1a1608,#141205)", bgLabel: "#1a1608" },
+  { nome: "Traição", desc: "Ferida de quem confiou e foi traído — por uma palavra, uma ausência, uma mentira. A confiança no outro foi quebrada no sistema.", cor: "#c89080", bg: "linear-gradient(135deg,#1f0e0a,#180a08)", bgLabel: "#1f0e0a" },
+  { nome: "Injustiça", desc: "Ferida de sentir que foi tratado de forma desigual, que seus direitos não foram reconhecidos ou que o sistema ignorou sua dor.", cor: "#90c8a8", bg: "linear-gradient(135deg,#0a1a10,#08140d)", bgLabel: "#0a1a10" },
+];
+
+const ORIGENS = [
+  { nome: "Feridas de Pertencimento", raiz: "Alguém do sistema foi excluído. A dor é lealdade.", sintomas: ["sensação de não ter lugar", "medo de rejeição", "autossabotagem", "solidão profunda"], desc: "Quando alguém foi excluído, rejeitado, esquecido ou não reconhecido pelo sistema familiar.", cor: "#a8b8d8", bg: "linear-gradient(135deg,#0d1220,#090e18)", bgLabel: "#0d1220" },
+  { nome: "Feridas de Amor Interrompido", raiz: "Vínculo parental fragilizado — pessoal ou transgeracional. O adulto reage com a dor da criança.", sintomas: ["carência excessiva", "dificuldade de confiar", "relações instáveis", "reatividade emocional"], desc: "Quando o fluxo natural de amor entre pais e filhos foi quebrado antes do tempo.", cor: "#c9a96e", bg: "linear-gradient(135deg,#1a1408,#130f05)", bgLabel: "#1a1408" },
+  { nome: "Feridas de Culpa e Compensação", raiz: "Compensações inconscientes dentro do sistema familiar.", sintomas: ["necessidade de se sacrificar", "dificuldade de prosperar", "medo de ser maior que os pais", "autopenalização"], desc: "Quando há desequilíbrio entre dar e receber, gerando ciclos de culpa e expiação no sistema.", cor: "#c8a0c8", bg: "linear-gradient(135deg,#180d18,#120910)", bgLabel: "#180d18" },
+  { nome: "Feridas de Traumas Transgeracionais", raiz: "O que é pesado não é pessoal. É memória que busca resolução.", sintomas: ["padrões repetitivos", "doenças recorrentes", "sensação de destino", "isso sempre acontece comigo"], desc: "Quando eventos não resolvidos no passado — perdas, violência, exclusões, lutos — atravessam gerações.", cor: "#c89878", bg: "linear-gradient(135deg,#1a1008,#140c05)", bgLabel: "#1a1008" },
+  { nome: "Feridas Existenciais", raiz: "Não é punição. É revelação — memórias profundas emergindo para serem integradas.", sintomas: ["sensação de deserto interno", "angústia sem causa aparente", "ruptura interna", "vazio existencial"], desc: "Momentos em que memórias profundas do sistema emergem como noites escuras da alma.", cor: "#9898c8", bg: "linear-gradient(135deg,#0f0d1a,#0a0912)", bgLabel: "#0f0d1a" },
+];
+
+const LINGUAGENS = [
+  { id: "palavras", opcao: "Eu preciso de palavras.", nome: "Palavras de Afirmação", frases: ["Eu preciso que diga que me ama.", "Preciso ouvir que sou importante."], raizes: ["amor não verbalizado na infância", "pai ou mãe emocionalmente distantes", "vínculo de amor interrompido"], frase_chave: "A criança não ouviu. O adulto exige.", cor: "#c9a96e" },
+  { id: "atencao", opcao: "Eu preciso de atenção.", nome: "Tempo de Qualidade", frases: ["Eu preciso que esteja comigo.", "Preciso que me priorize."], raizes: ["ausência física ou emocional dos pais", "abandono real ou simbólico", "exclusão afetiva"], frase_chave: "Aqui pode tocar pertencimento.", cor: "#8fb4c8" },
+  { id: "toque", opcao: "Eu preciso que me toque.", nome: "Toque Físico", frases: ["Eu preciso de abraço.", "Preciso de proximidade."], raizes: ["carência de contato precoce", "hospitalização ou separações precoces", "mãe deprimida ou distante"], frase_chave: "Amor interrompido no corpo.", cor: "#c8a0c8" },
+  { id: "servico", opcao: "Eu preciso que faça por mim.", nome: "Atos de Serviço", frases: ["Preciso que faça por mim.", "Preciso que me ajude."], raizes: ["criança que precisou ser adulta cedo", "inversão de papéis familiares", "falta de suporte parental"], frase_chave: "Eu tive que dar conta sozinho.", cor: "#a8c8a0" },
+  { id: "presentes", opcao: "Eu preciso ganhar presentes.", nome: "Presentes", frases: ["Eu preciso ganhar algo.", "Preciso receber algo concreto."], raizes: ["culpa parental compensada com objetos", "amor material substituindo presença", "ausência emocional mascarada por coisas"], frase_chave: "A pessoa aprendeu que amor = objeto.", cor: "#c89878" },
+];
+
+const TAGS = [
+  ["Medo do pai","Filho que cresceu com medo do pai violento e tentava proteger a mãe"],
+  ["Filho no lugar do pai","Filho que assumiu o papel de protetor da mãe e ficou no lugar do pai"],
+  ["Bebê não nasceu","Bebê que não nasceu, aborto que não foi reconhecido pela família"],
+  ["Irmão morreu","Irmão que morreu e não foi suficientemente lembrado ou honrado"],
+  ["Violência transgeracional","Violência doméstica com repetição transgeracional"],
+  ["Movimento interrompido","Bebê separado da mãe logo após o nascimento"],
+  ["Hierarquia entre irmãs","Irmã mais nova que não respeita a hierarquia"],
+  ["Pai ausente","Pai que foi embora e nunca esteve presente na vida do filho"],
+  ["Mãe distante","Mãe que se afastou emocionalmente e nunca demonstrou afeto"],
+  ["Adoção","Criança adotada que carrega o movimento interrompido com a mãe biológica"],
+  ["Trauma no corpo","Trauma guardado no corpo, sintomas físicos emocionais"],
+  ["Culpa","Pessoa que carrega culpa excessiva que não foi sua responsabilidade"],
+  ["Exclusão","Pessoa que se sente excluída da família"],
+  ["Lealdade invisível","Filho que repete o mesmo destino dos pais sem perceber"],
+  ["Separação dos pais","Pais que se separaram e filho ficou no meio"],
+  ["Perdão","Pessoa presa no ressentimento que não consegue perdoar"],
+];
+
+const MUSICAS_NAC = [
+  {id:"vinculo",youtube_id:"IG1ZU56tsdo",titulo:"Aquarela",artista:"Toquinho"},
+  {id:"lealdade",youtube_id:"pRpeEdMmmQ0",titulo:"Somos Todos Iguais Agora",artista:"Cazuza"},
+  {id:"exclusao",youtube_id:"bE7S_gHkOQs",titulo:"Comportamento Geral",artista:"Gonzaguinha"},
+  {id:"compensacao",youtube_id:"4N1iwQxiHrs",titulo:"O Que É, O Que É?",artista:"Gonzaguinha"},
+  {id:"repeticao",youtube_id:"qHm9MG9xw1o",titulo:"Tocando em Frente",artista:"Almir Sater"},
+  {id:"transgeracional",youtube_id:"XKu_QHgBJr0",titulo:"Tempo Rei",artista:"Gilberto Gil"},
+  {id:"sintoma",youtube_id:"FVpQCBqcHpY",titulo:"O Corpo",artista:"Zeca Baleiro"},
+  {id:"hierarquia",youtube_id:"2DxHXeRhEHo",titulo:"Pai e Filho",artista:"Legião Urbana"},
+  {id:"interrupcao",youtube_id:"ZnHmskwqCCQ",titulo:"Como Nossos Pais",artista:"Elis Regina"},
+  {id:"identificacao",youtube_id:"qVUoAoHMDhQ",titulo:"Cio da Terra",artista:"Milton Nascimento e Chico Buarque"},
+  {id:"pertencimento",youtube_id:"CvFH_6DNRCY",titulo:"Encontros e Despedidas",artista:"Milton Nascimento"},
+  {id:"amor_interrompido",youtube_id:"gUnt3sA5ukk",titulo:"Por Toda Minha Vida",artista:"Tom Jobim e Vinicius de Moraes"},
+  {id:"culpa",youtube_id:"k0MZUMaDn-s",titulo:"Misericórdia",artista:"Ivan Lins"},
+  {id:"trauma",youtube_id:"8UVNT4wvIGY",titulo:"Travessia",artista:"Milton Nascimento"},
+  {id:"existencial",youtube_id:"Ys9xhqpGGgM",titulo:"Cantiga por Luciana",artista:"Tom Jobim"},
+  {id:"abandono",youtube_id:"0pu53JCdKGU",titulo:"O Bêbado e a Equilibrista",artista:"Elis Regina"},
+  {id:"rejeicao",youtube_id:"DpHSpHcFNeE",titulo:"Gente Humilde",artista:"Chico Buarque"},
+  {id:"injustica",youtube_id:"AaHKpN3OFKQ",titulo:"Apesar de Você",artista:"Chico Buarque"},
+  {id:"traicao",youtube_id:"9e3pF4AXpHs",titulo:"Olhos nos Olhos",artista:"Chico Buarque"},
+  {id:"reparacao",youtube_id:"Nt-knGNS5mM",titulo:"Amor até o Fim",artista:"Vinicius de Moraes"},
+  {id:"romaria",youtube_id:"WpM077KNBe0",titulo:"Romaria",artista:"Elis Regina / Renato Teixeira"},
+  {id:"trem_bala",youtube_id:"FQqRt0bstJs",titulo:"Trem Bala",artista:"Ana Vilela"},
+  {id:"pais_filhos",youtube_id:"mFB1t9K-n3I",titulo:"Pais e Filhos",artista:"Legião Urbana"},
+  {id:"maria_maria",youtube_id:"Uv-ZUoKMSdo",titulo:"Maria, Maria",artista:"Milton Nascimento"},
+  {id:"cancao_america",youtube_id:"p5i_G-1ZRRI",titulo:"Canção da América",artista:"Milton Nascimento"},
+  {id:"coracao_est",youtube_id:"9j6glYRJO9c",titulo:"Coração de Estudante",artista:"Milton Nascimento"},
+  {id:"oracao_banda",youtube_id:"1yTlAPuBqRA",titulo:"Oração",artista:"A Banda Mais Bonita da Cidade"},
+  {id:"velha_infancia",youtube_id:"P9KZZS3MKPU",titulo:"Velha Infância",artista:"Tribalistas"},
+  {id:"guerreiro_menino",youtube_id:"Z3-kOnNuGBo",titulo:"Guerreiro Menino",artista:"Gonzaguinha"},
+  {id:"espatodea",youtube_id:"n9YT-VQYF8c",titulo:"Espatódea",artista:"Nando Reis"},
+  {id:"o_sol",youtube_id:"gMM3CUKDLEs",titulo:"O Sol",artista:"Vitor Kley"},
+  {id:"anunciacao",youtube_id:"E7fBBzMCJpc",titulo:"Anunciação",artista:"Alceu Valença"},
+  {id:"asa_branca",youtube_id:"NJVMiclp_L8",titulo:"Asa Branca",artista:"Luiz Gonzaga"},
+  {id:"amor_i_love",youtube_id:"u32vZ8esCao",titulo:"Amor I Love You",artista:"Marisa Monte"},
+  {id:"vilarejo",youtube_id:"T8SazJFpjFc",titulo:"Vilarejo",artista:"Marisa Monte"},
+  {id:"segundo_sol",youtube_id:"NqtKNrpUJOc",titulo:"Segundo Sol",artista:"Cássia Eller"},
+  {id:"por_enquanto",youtube_id:"uFOLH0Y-MkY",titulo:"Por Enquanto",artista:"Legião Urbana"},
+  {id:"monte_castelo",youtube_id:"6V3BxLjMoHg",titulo:"Monte Castelo",artista:"Legião Urbana"},
+  {id:"tempo_perdido",youtube_id:"b5Iij-FumcQ",titulo:"Tempo Perdido",artista:"Legião Urbana"},
+  {id:"meu_abrigo",youtube_id:"ewlnkBrxSJo",titulo:"Meu Abrigo",artista:"Melim"},
+  {id:"dois_rios",youtube_id:"0WbFwsZgFiA",titulo:"Dois Rios",artista:"Skank"},
+  {id:"epitafio",youtube_id:"09QHs5H9GtE",titulo:"Epitáfio",artista:"Titãs"},
+  {id:"tempo_nao_para",youtube_id:"ZDG_mK7VRLM",titulo:"O Tempo Não Para",artista:"Cazuza"},
+  {id:"amor_recomecar",youtube_id:"e5OP0ioY_5I",titulo:"Amor pra Recomeçar",artista:"Frejat"},
+  {id:"metamorfose",youtube_id:"6WRKlrfJOqY",titulo:"Metamorfose Ambulante",artista:"Raul Seixas"},
+  {id:"construcao",youtube_id:"LDoGRMm4OXs",titulo:"Construção",artista:"Chico Buarque"},
+  {id:"calice",youtube_id:"lMZS3FQOIM8",titulo:"Cálice",artista:"Chico Buarque"},
+  {id:"aguas_marco",youtube_id:"oGQv7XH7MnI",titulo:"Águas de Março",artista:"Tom Jobim"},
+  {id:"oracao_tempo",youtube_id:"pkINaijWsSc",titulo:"Oração ao Tempo",artista:"Caetano Veloso"},
+  {id:"oceano",youtube_id:"t5JYrMD0Kpk",titulo:"Oceano",artista:"Djavan"},
+  {id:"planeta_agua",youtube_id:"KNTHLm7JEDI",titulo:"Planeta Água",artista:"Guilherme Arantes"},
+  {id:"sou_ze_silva",youtube_id:"hXJFWsVbqJo",titulo:"Sou um Zé da Silva",artista:"Pe. Fábio de Melo"},
+];
+
+const MUSICAS_INT = [
+  {id:"imagine",youtube_id:"YkgkThdzX-8",titulo:"Imagine",artista:"John Lennon"},
+  {id:"let_it_be",youtube_id:"QDYfEBY9NM4",titulo:"Let It Be",artista:"The Beatles"},
+  {id:"hey_jude",youtube_id:"A_MjCqQoLLA",titulo:"Hey Jude",artista:"The Beatles"},
+  {id:"yesterday",youtube_id:"NrgmdOz227I",titulo:"Yesterday",artista:"The Beatles"},
+  {id:"hallelujah",youtube_id:"ttEMYvpoR-k",titulo:"Hallelujah",artista:"Leonard Cohen"},
+  {id:"fix_you",youtube_id:"k4V3Mo61fJM",titulo:"Fix You",artista:"Coldplay"},
+  {id:"the_scientist",youtube_id:"RB-RcX5DS5A",titulo:"The Scientist",artista:"Coldplay"},
+  {id:"viva_la_vida",youtube_id:"dvgZkm1xWPE",titulo:"Viva La Vida",artista:"Coldplay"},
+  {id:"someone_you",youtube_id:"hLQl3WQQoQ0",titulo:"Someone Like You",artista:"Adele"},
+  {id:"hello_adele",youtube_id:"YQHsXMglC9A",titulo:"Hello",artista:"Adele"},
+  {id:"easy_on_me",youtube_id:"U3ASj1L6_sY",titulo:"Easy On Me",artista:"Adele"},
+  {id:"all_of_me",youtube_id:"450p7goxZqg",titulo:"All of Me",artista:"John Legend"},
+  {id:"stay_with_me",youtube_id:"pB-5XG-DbAA",titulo:"Stay With Me",artista:"Sam Smith"},
+  {id:"shallow",youtube_id:"bo_efYLyX_I",titulo:"Shallow",artista:"Lady Gaga"},
+  {id:"my_heart",youtube_id:"FHG2oizTlpY",titulo:"My Heart Will Go On",artista:"Celine Dion"},
+  {id:"i_will_always",youtube_id:"3JWTaaS7LdU",titulo:"I Will Always Love You",artista:"Whitney Houston"},
+  {id:"heal_world",youtube_id:"BWf-eARnf6U",titulo:"Heal the World",artista:"Michael Jackson"},
+  {id:"man_mirror",youtube_id:"PivWY9wn5ps",titulo:"Man in the Mirror",artista:"Michael Jackson"},
+  {id:"perfect",youtube_id:"2Vv-BfVoq4g",titulo:"Perfect",artista:"Ed Sheeran"},
+  {id:"photograph",youtube_id:"mt-xggHXqkA",titulo:"Photograph",artista:"Ed Sheeran"},
+  {id:"thinking_loud",youtube_id:"lp-EBmlNEDo",titulo:"Thinking Out Loud",artista:"Ed Sheeran"},
+  {id:"let_her_go",youtube_id:"RBumgq5yVrA",titulo:"Let Her Go",artista:"Passenger"},
+  {id:"human",youtube_id:"L3wKzyIN1yk",titulo:"Human",artista:"Rag'n'Bone Man"},
+  {id:"take_me_church",youtube_id:"MYSVMgRr6pw",titulo:"Take Me to Church",artista:"Hozier"},
+  {id:"say_something",youtube_id:"2rEHgbK2Rea",titulo:"Say Something",artista:"A Great Big World"},
+  {id:"chasing_cars",youtube_id:"GemKqzILV4w",titulo:"Chasing Cars",artista:"Snow Patrol"},
+  {id:"rise_up",youtube_id:"lwgr_IMeEgA",titulo:"Rise Up",artista:"Andra Day"},
+  {id:"stand_by_me",youtube_id:"hwZNL7QVJjE",titulo:"Stand By Me",artista:"Ben E. King"},
+  {id:"lean_on_me",youtube_id:"fOZ-MySzAac",titulo:"Lean on Me",artista:"Bill Withers"},
+  {id:"bridge_troubled",youtube_id:"MhmkgXCxCRk",titulo:"Bridge Over Troubled Water",artista:"Simon & Garfunkel"},
+  {id:"sound_silence",youtube_id:"4zLfCnGVeL4",titulo:"The Sound of Silence",artista:"Simon & Garfunkel"},
+  {id:"no_woman_cry",youtube_id:"x6YsLtMtMBM",titulo:"No Woman No Cry",artista:"Bob Marley"},
+  {id:"redemption_song",youtube_id:"t9DVR1fGzvo",titulo:"Redemption Song",artista:"Bob Marley"},
+  {id:"counting_stars",youtube_id:"hT_nvWreIhg",titulo:"Counting Stars",artista:"OneRepublic"},
+  {id:"hero_mariah",youtube_id:"0IA3ZvCkRkQ",titulo:"Hero",artista:"Mariah Carey"},
+  {id:"if_i_aint",youtube_id:"6FxKEMbcayw",titulo:"If I Ain't Got You",artista:"Alicia Keys"},
+  {id:"no_one",youtube_id:"N91REV-PiLM",titulo:"No One",artista:"Alicia Keys"},
+  {id:"beautiful",youtube_id:"eAfyFTzZDMM",titulo:"Beautiful",artista:"Christina Aguilera"},
+  {id:"see_you_again",youtube_id:"RgKAFK5djSk",titulo:"See You Again",artista:"Wiz Khalifa"},
+  {id:"memories",youtube_id:"SlPhMPnQ58k",titulo:"Memories",artista:"Maroon 5"},
+  {id:"unchained",youtube_id:"1k8craCGpgs",titulo:"Unchained Melody",artista:"The Righteous Brothers"},
+  {id:"angels",youtube_id:"N5wzbkn4cBM",titulo:"Angels",artista:"Robbie Williams"},
+  {id:"someone_loved",youtube_id:"zABZyAoxobQ",titulo:"Someone You Loved",artista:"Lewis Capaldi"},
+  {id:"arcade",youtube_id:"M3hFN6QKXoA",titulo:"Arcade",artista:"Duncan Laurence"},
+  {id:"thousand_years",youtube_id:"rtOvBOTyX00",titulo:"A Thousand Years",artista:"Christina Perri"},
+  {id:"you_raise_me",youtube_id:"aJxrX57dBPo",titulo:"You Raise Me Up",artista:"Josh Groban"},
+  {id:"everybody_hurts",youtube_id:"5rOiW_xY-kc",titulo:"Everybody Hurts",artista:"R.E.M."},
+  {id:"mad_world",youtube_id:"4N3N1MlvVc4",titulo:"Mad World",artista:"Gary Jules"},
+  {id:"goodness_god",youtube_id:"F8YBWHbKKw8",titulo:"Goodness of God",artista:"CeCe Winans"},
+  {id:"my_way",youtube_id:"6E2hYDIFDIU",titulo:"My Way",artista:"Frank Sinatra"},
+];
+
+const MUSICAS_PROMPT = "MÚSICAS NACIONAIS:\n" + MUSICAS_NAC.map(m=>`${m.id} → "${m.titulo}" — ${m.artista}`).join("\n") + "\n\nMÚSICAS INTERNACIONAIS:\n" + MUSICAS_INT.map(m=>`${m.id} → "${m.titulo}" — ${m.artista}`).join("\n");
+
+const PROMPT = `Você é especialista em Constelação Familiar e Visão Sistêmica, com base de conhecimento integrada dos seguintes autores e abordagens:
+
+— CONSTELAÇÃO FAMILIAR & VISÃO SISTÊMICA: Bert Hellinger, Sophie Hellinger, Albrecht Mahr, Joan Garriga
+— TRAUMA TRANSGERACIONAL & MEMÓRIA ANCESTRAL: Franz Ruppert, Anne Ancelin Schützenberger, Rupert Sheldrake (campos morfogenéticos), Ivan Boszormenyi-Nagy (lealdades invisíveis, livro de contas geracional)
+— TRAUMA, CORPO & SISTEMA NERVOSO: Peter Levine (Somatic Experiencing), Bessel van der Kolk, Stephen Porges (Teoria Polivagal), Gabor Maté
+— NEUROCIÊNCIA & VÍNCULO: Dan Siegel (neurobiologia interpessoal), John Bowlby (Teoria do Apego), Donald Winnicott (vínculo precoce, mãe suficientemente boa)
+— TERAPIA FAMILIAR & RELACIONAL: Virginia Satir, Eric Berne (Análise Transacional, script de vida)
+— CORPO, SÍMBOLO & DOENÇA: Rüdiger Dahlke (doença como linguagem da alma)
+— PSICOLOGIA PROFUNDA: Carl Gustav Jung (inconsciente coletivo, arquétipos, sombra familiar, individuação)
+— BIOLOGIA & SISTEMAS VIVOS: Humberto Maturana (autopoiese, biologia do amor)
+
+Analise a situação e retorne APENAS um JSON puro válido. Sem texto antes ou depois. Sem markdown. Sem blocos de código.
+
+Estrutura exata:
+{"dinamica":"...","reflexao":"...","musica_nac":{"id":"...","motivo":"..."},"musica_int":{"id":"...","motivo":"..."},"lei":"...","feridas":["..."],"origem":"...","investigacao":[{"tema":"...","subtema":"...","pergunta":"..."}],"categorias":[{"nome":"...","frases":[{"texto":"...","especialista":"...","contexto":"..."}]}],"exercicios":[{"titulo":"...","descricao":"...","intencao":"...","sensorial":false}]}
+
+DINÂMICAS — use nome exato de uma:
+Vínculo de amor interrompido | Lealdade invisível | Exclusão de membros do sistema | Compensações inconscientes | Repetição de destinos traumáticos | Memórias transgeracionais ativadas | Sintoma como mensageiro sistêmico | Desordens hierárquicas | Interrupção do movimento amoroso | Identificações inconscientes com antepassados
+
+LEIS — use nome exato de uma:
+Pertencimento | Ordem (Hierarquia) | Equilíbrio (Dar e Receber)
+
+FERIDAS EMOCIONAIS — selecione a(s) que mais se manifestam (array, mesmo com 1 elemento):
+Rejeição | Abandono | Humilhação | Traição | Injustiça
+
+ORIGENS SISTÊMICAS DO SOFRIMENTO — selecione exatamente 1 (string simples):
+Feridas de Pertencimento | Feridas de Amor Interrompido | Feridas de Culpa e Compensação | Feridas de Traumas Transgeracionais | Feridas Existenciais
+
+INVESTIGAÇÃO — gere exatamente 5 perguntas:
+1. tema: "Reconhecer o Vínculo", subtema: "Reconhecer o acontecimento — quando isso começou"
+2. tema: "Reconhecer a Dor", subtema: "Reconhecer o lugar que ocupou — o que assumiu"
+3. tema: "Reconhecer a Culpa", subtema: "Reconhecer o limite humano — importante para dissolver"
+4. tema: "Reconhecer o Amor", subtema: "Reconhecer o limite humano — trazer novamente o amor para o campo"
+5. tema: "Abrir Espaço para a Reparação", subtema: "Perceber se o campo está pronto e sensível para iniciar as frases"
+Cada pergunta: profunda, gentil, aberta, diretamente relacionada à situação.
+
+MÚSICA SISTÊMICA — escolha 1 nacional e 1 internacional das listas:
+${MUSICAS_PROMPT}
+
+REGRAS:
+- reflexao: 2-3 frases curtas.
+- categorias: máximo 3, máximo 4 frases cada. Cada frase: texto (a frase), especialista (autor), contexto (para quem se aplica).
+- exercicios: exatamente 4. Os 3 primeiros sensorial:false. O 4º sensorial:true (exercício corporal baseado em Porges/Levine/van der Kolk, específico para a dinâmica identificada).
+- RETORNE APENAS O JSON PURO.`;
+
+// ─── ESTADO ──────────────────────────────────────────────────────────────────
+let state = {
+  users: [...DEFAULT_USERS],
+  screen: 'login',
+  me: null,
+  lu: '', lp: '', lerr: '',
+  sit: '', busy: false, res: null, err: '',
+  cp: null, toast: false,
+  nu: '', np: '', amsg: {e:'',o:''},
+  exOpen: {},
+  linguagensSel: [],
+};
+
+// Inputs que NÃO devem causar re-render (lidos na hora da ação)
+const liveInputs = {};
+
+function setState(patch) {
+  Object.assign(state, typeof patch === 'function' ? patch(state) : patch);
+  render();
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+const C = {
+  A:"#c9a96e", A2:"#8fa8c8", A3:"#a8c8a0",
+  BG:"#0d0d0f", BG2:"#13131a", SURF:"#1a1a24",
+  BORD:"#2a2a38", TXT:"#e8e4dc", MUT:"#7a7a8a",
+  serif:"'Cormorant Garamond','Georgia',serif",
+  sans:"'Jost','Trebuchet MS',sans-serif",
+};
+
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  if (attrs) {
+    for (const [k,v] of Object.entries(attrs)) {
+      if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+      else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
+      else if (k === 'className') el.className = v;
+      else if (k === 'disabled') { if(v) el.disabled = true; }
+      else if (k === 'placeholder') el.placeholder = v;
+      else if (k === 'type') el.type = v;
+      else if (k === 'value' && (tag==='input'||tag==='textarea')) { el.value = v; }
+      else if (k === 'href') el.href = v;
+      else if (k === 'target') el.target = v;
+      else if (k === 'rel') el.rel = v;
+      else el.setAttribute(k, v);
+    }
+  }
+  for (const child of children.flat()) {
+    if (child == null || child === false) continue;
+    if (typeof child === 'string' || typeof child === 'number') el.appendChild(document.createTextNode(child));
+    else el.appendChild(child);
+  }
+  return el;
+}
+
+function css(obj) { return obj; }
+
+function logo() {
+  const d = h('div', {style:css({display:'flex',alignItems:'center',gap:'14px',justifyContent:'center',marginBottom:'14px'})});
+  d.appendChild(h('div', {style:css({width:'44px',height:'1px',background:`linear-gradient(90deg,transparent,${C.A})`})}));
+  d.appendChild(h('div', {style:css({width:'7px',height:'7px',border:`1px solid ${C.A}`,transform:'rotate(45deg)'})}));
+  d.appendChild(h('div', {style:css({width:'44px',height:'1px',background:`linear-gradient(90deg,${C.A},transparent)`})}));
+  return d;
+}
+
+function btn(text, onClick, {sm=false, danger=false, disabled=false, extraStyle={}}={}) {
+  return h('button', {
+    onClick, disabled,
+    style: css({
+      background:'transparent',
+      border:`1px solid ${danger?'#e07070':C.A}`,
+      color: danger?'#e07070':C.A,
+      fontFamily: C.sans,
+      fontSize: sm?'0.7rem':'0.8rem',
+      letterSpacing:'0.18em',
+      textTransform:'uppercase',
+      cursor: disabled?'not-allowed':'pointer',
+      borderRadius:'3px',
+      padding: sm?'7px 14px':'13px 20px',
+      opacity: disabled?0.5:1,
+      ...extraStyle
+    })
+  }, text);
+}
+
+function infoBox({label, bg, bgLabel, bColor, tColor, nome, desc}) {
+  const wrap = h('div', {style:css({background:bg, border:`1px solid ${bColor}35`, borderTop:`2px solid ${bColor}`, borderRadius:'3px', padding:'24px 28px', marginBottom:'16px', position:'relative'})});
+  const lbl = h('div', {style:css({position:'absolute',top:'-10px',left:'22px',background:bgLabel,padding:'0 10px',fontSize:'0.65rem',letterSpacing:'0.22em',textTransform:'uppercase',color:tColor})}, label);
+  const nm = h('div', {style:css({fontFamily:C.serif,fontSize:'1.35rem',color:C.TXT,marginBottom:'10px'})}, nome);
+  const ds = h('div', {style:css({fontFamily:C.serif,fontSize:'1.08rem',lineHeight:'1.8',color:'rgba(232,228,220,0.6)',fontStyle:'italic'})}, desc||'');
+  wrap.append(lbl, nm, ds);
+  return wrap;
+}
+
+function spin() {
+  return h('div', {style:css({width:'13px',height:'13px',border:`2px solid ${C.A}`,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.7s linear infinite',flexShrink:'0'})});
+}
+
+// ─── API CALL ─────────────────────────────────────────────────────────────────
+async function gerar() {
+  const tapval = document.getElementById('inp-sit');
+  if(tapval) state.sit = tapval.value;
+  if (!state.sit.trim()) return;
+  setState({busy:true, res:null, err:'', exOpen:{}});
+  try {
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:4000,
+        system: PROMPT,
+        messages:[{role:"user", content:"Situação: "+state.sit}]
+      })
+    });
+    if (!r.ok) {
+      const eb = await r.text();
+      let msg = "Erro "+r.status;
+      try { const ej=JSON.parse(eb); msg = ej.error?.message||msg; } catch(_){}
+      throw new Error(msg);
+    }
+    const d = await r.json();
+    if (d.stop_reason==="max_tokens") throw new Error("Resposta cortada. Tente uma situação mais curta.");
+    const raw = ((d.content&&d.content[0]&&d.content[0].text)||"").trim();
+    if (!raw) throw new Error("Resposta vazia da API. Tente novamente.");
+    // Tentativas de parse progressivas
+    let parsed = null;
+    const candidates = [
+      raw,
+      raw.replace(/^```json\s*/,"").replace(/\s*```$/,"").trim(),
+      raw.replace(/```json|```/g,"").trim(),
+    ];
+    for (const c of candidates) {
+      try { parsed = JSON.parse(c); break; } catch(_) {}
+    }
+    // Última tentativa: extrair o maior bloco {} da resposta
+    if (!parsed) {
+      const m = raw.match(/\{[\s\S]*\}/);
+      if (m) { try { parsed = JSON.parse(m[0]); } catch(_) {} }
+    }
+    if (!parsed) {
+      // Mostra os primeiros 300 chars para diagnóstico
+      throw new Error("JSON inválido. Resposta recebida: " + raw.slice(0,300));
+    }
+    setState({res:parsed});
+  } catch(e) {
+    setState({err:e.message||"Erro desconhecido."});
+  } finally {
+    setState({busy:false});
+  }
+}
+
+function copy(txt, id) {
+  navigator.clipboard.writeText(txt).then(()=>{
+    setState({cp:id});
+    setTimeout(()=>setState({cp:null}),1500);
+    setState({toast:true});
+    setTimeout(()=>setState({toast:false}),2000);
+  });
+}
+
+// ─── RENDER SECTIONS ─────────────────────────────────────────────────────────
+function renderLogin() {
+  const wrap = h('div', {style:css({background:C.BG,color:C.TXT,fontFamily:C.sans,fontWeight:'300',minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',padding:'24px'})});
+  const box = h('div', {style:css({background:C.SURF,border:`1px solid ${C.BORD}`,borderRadius:'6px',padding:'48px 40px',width:'100%',maxWidth:'420px',position:'relative'})});
+  const bar = h('div', {style:css({position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${C.A},transparent)`,borderRadius:'6px 6px 0 0'})});
+
+  const title = h('div', {style:css({fontFamily:C.serif,fontSize:'2rem',fontWeight:'300',textAlign:'center',lineHeight:'1.2'})});
+  title.appendChild(document.createTextNode('Percepções & '));
+  const em = h('em', {style:css({color:C.A})}, 'Consciência');
+  title.appendChild(em);
+
+  const sub = h('div', {style:css({color:C.MUT,fontSize:'0.78rem',letterSpacing:'0.14em',textTransform:'uppercase',marginTop:'8px',textAlign:'center',marginBottom:'36px'})}, 'Visão Sistêmica');
+
+  const luLbl = h('div', {style:css({fontSize:'0.72rem',letterSpacing:'0.16em',textTransform:'uppercase',color:C.A,marginBottom:'8px'})}, 'Usuário');
+  const luInput = h('input', {
+    id: 'inp-lu',
+    placeholder: 'seu usuário',
+    style: css({width:'100%',background:C.BG2,border:`1px solid ${C.BORD}`,borderRadius:'3px',color:C.TXT,fontFamily:C.sans,fontSize:'1rem',padding:'12px 14px',outline:'none',marginBottom:'18px'}),
+    onKeydown: e=>{ if(e.key==='Enter') document.getElementById('lp-inp')&&document.getElementById('lp-inp').focus(); }
+  });
+  luInput.value = state.lu;
+
+  const lpLbl = h('div', {style:css({fontSize:'0.72rem',letterSpacing:'0.16em',textTransform:'uppercase',color:C.A,marginBottom:'8px'})}, 'Senha');
+  const lpInput = h('input', {
+    type:'password', id:'lp-inp', placeholder:'sua senha',
+    style: css({width:'100%',background:C.BG2,border:`1px solid ${C.BORD}`,borderRadius:'3px',color:C.TXT,fontFamily:C.sans,fontSize:'1rem',padding:'12px 14px',outline:'none',marginBottom:'10px'}),
+    onKeydown: e=>{ if(e.key==='Enter') loginAction(); }
+  });
+  lpInput.value = state.lp;
+
+  const errDiv = h('div', {style:css({color:'#e08080',fontSize:'0.82rem',textAlign:'center',marginBottom:'14px',minHeight:'20px'})}, state.lerr);
+  const loginBtn = btn('Entrar', loginAction, {extraStyle:{width:'100%',padding:'14px'}});
+
+  box.append(bar, logo(), title, sub, luLbl, luInput, lpLbl, lpInput, errDiv, loginBtn);
+  wrap.appendChild(box);
+  return wrap;
+}
+
+function loginAction() {
+  const lu = (document.getElementById('inp-lu')?.value||'').trim();
+  const lp = document.getElementById('lp-inp')?.value||'';
+  state.lu = lu; state.lp = lp;
+  const f = state.users.find(x=>x.user===lu&&x.pass===lp);
+  if (!f) { setState({lerr:'Usuário ou senha incorretos.'}); return; }
+  setState({lerr:'',me:f,screen:'app',lu:'',lp:''});
+}
+
+function renderAdmin() {
+  const wrap = h('div', {style:css({background:C.BG,color:C.TXT,fontFamily:C.sans,fontWeight:'300',minHeight:'100vh',padding:'40px 20px 80px',display:'flex',flexDirection:'column',alignItems:'center'})});
+  const inner = h('div', {style:css({width:'100%',maxWidth:'740px'})});
+
+  const hdr = h('div', {style:css({display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'28px'})});
+  const hdrTitle = h('div', {style:css({fontFamily:C.serif,fontSize:'1.7rem',fontWeight:'300'})});
+  hdrTitle.appendChild(document.createTextNode('Painel '));
+  hdrTitle.appendChild(h('em',{style:css({color:C.A})},'Admin'));
+  hdr.append(hdrTitle, btn('Voltar',()=>setState({screen:'app'}),{sm:true}));
+
+  // Add user box
+  const addBox = h('div', {style:css({background:C.SURF,border:`1px solid ${C.BORD}`,borderRadius:'4px',padding:'24px',marginBottom:'18px',position:'relative'})});
+  addBox.appendChild(h('div',{style:css({position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${C.A2},transparent)`,borderRadius:'4px 4px 0 0'})}));
+  addBox.appendChild(h('div',{style:css({fontSize:'0.68rem',letterSpacing:'0.18em',textTransform:'uppercase',color:C.A2,marginBottom:'16px'})},'Adicionar novo usuário'));
+  const addRow = h('div',{style:css({display:'flex',gap:'10px',flexWrap:'wrap'})});
+  const nuInp = h('input',{id:'inp-nu',placeholder:'usuário',style:css({flex:'1',minWidth:'130px',background:C.BG2,border:`1px solid ${C.BORD}`,borderRadius:'3px',color:C.TXT,fontFamily:C.sans,fontSize:'0.92rem',padding:'10px 12px',outline:'none'})});
+  nuInp.value=state.nu;
+  const npInp = h('input',{id:'inp-np',type:'password',placeholder:'senha',style:css({flex:'1',minWidth:'130px',background:C.BG2,border:`1px solid ${C.BORD}`,borderRadius:'3px',color:C.TXT,fontFamily:C.sans,fontSize:'0.92rem',padding:'10px 12px',outline:'none'})});
+  npInp.value=state.np;
+  addRow.append(nuInp,npInp,btn('Adicionar',addUserAction,{sm:true,extraStyle:{padding:'10px 20px'}}));
+  addBox.appendChild(addRow);
+  if(state.amsg.e) addBox.appendChild(h('div',{style:css({color:'#e08080',fontSize:'0.8rem',marginTop:'10px'})},state.amsg.e));
+  if(state.amsg.o) addBox.appendChild(h('div',{style:css({color:'#6ec99a',fontSize:'0.8rem',marginTop:'10px'})},state.amsg.o));
+
+  // Users table
+  const usrBox = h('div',{style:css({background:C.SURF,border:`1px solid ${C.BORD}`,borderRadius:'4px',padding:'24px',position:'relative'})});
+  usrBox.appendChild(h('div',{style:css({position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${C.A2},transparent)`,borderRadius:'4px 4px 0 0'})}));
+  usrBox.appendChild(h('div',{style:css({fontSize:'0.68rem',letterSpacing:'0.18em',textTransform:'uppercase',color:C.A2,marginBottom:'16px'})},'Usuários cadastrados'));
+  const tbl = h('table',{style:css({width:'100%',borderCollapse:'collapse'})});
+  const thead = h('thead'); const tr0=h('tr');
+  for(const hd of ['Usuário','Tipo','Senha','']) tr0.appendChild(h('th',{style:css({fontSize:'0.65rem',letterSpacing:'0.16em',textTransform:'uppercase',color:C.MUT,textAlign:'left',padding:'8px 10px',borderBottom:`1px solid ${C.BORD}`})},hd));
+  thead.appendChild(tr0); tbl.appendChild(thead);
+  const tbody=h('tbody');
+  state.users.forEach((u,i)=>{
+    const tr=h('tr');
+    tr.appendChild(h('td',{style:css({padding:'12px 10px',borderBottom:'1px solid rgba(42,42,56,0.5)',fontSize:'0.92rem'})},u.user));
+    const badge=h('span',{style:css({fontSize:'0.65rem',letterSpacing:'0.12em',textTransform:'uppercase',padding:'3px 8px',borderRadius:'2px',background:u.role==='admin'?'rgba(201,169,110,0.15)':'rgba(143,168,200,0.12)',color:u.role==='admin'?C.A:C.A2,border:`1px solid ${u.role==='admin'?'rgba(201,169,110,0.3)':'rgba(143,168,200,0.25)'}`})},u.role==='admin'?'admin':'aluno');
+    tr.appendChild(h('td',{style:css({padding:'12px 10px',borderBottom:'1px solid rgba(42,42,56,0.5)'})},badge));
+    tr.appendChild(h('td',{style:css({padding:'12px 10px',borderBottom:'1px solid rgba(42,42,56,0.5)',color:C.MUT,fontSize:'0.86rem'})},'•'.repeat(Math.min(u.pass.length,8))));
+    const tdBtn=h('td',{style:css({padding:'12px 10px',borderBottom:'1px solid rgba(42,42,56,0.5)',textAlign:'right'})});
+    if(u.role!=='admin') tdBtn.appendChild(btn('Remover',()=>delUserAction(i),{sm:true,danger:true}));
+    tr.appendChild(tdBtn);
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody); usrBox.appendChild(tbl);
+
+  inner.append(hdr,addBox,usrBox);
+  wrap.appendChild(inner);
+  return wrap;
+}
+
+function addUserAction() {
+  const nu=(document.getElementById('inp-nu')?.value||'').trim();
+  const np=document.getElementById('inp-np')?.value||'';
+  state.nu=nu; state.np=np;
+  if(!nu||!np){setState({amsg:{e:'Preencha usuário e senha.',o:''}});return;}
+  if(state.users.find(x=>x.user===nu)){setState({amsg:{e:'Usuário já existe.',o:''}});return;}
+  if(np.length<4){setState({amsg:{e:'Senha deve ter ao menos 4 caracteres.',o:''}});return;}
+  setState(s=>({users:[...s.users,{user:nu,pass:np,role:'user'}],nu:'',np:'',amsg:{e:'',o:`Adicionado: ${nu}`}}));
+}
+
+function delUserAction(i) {
+  if(state.users[i].role==='admin')return;
+  if(!confirm('Remover '+state.users[i].user+'?'))return;
+  setState(s=>({users:s.users.filter((_,j)=>j!==i)}));
+}
+
+function renderApp() {
+  const wrap = h('div',{style:css({background:C.BG,color:C.TXT,fontFamily:C.sans,fontWeight:'300',minHeight:'100vh',display:'flex',flexDirection:'column',alignItems:'center',padding:'40px 20px 80px'})});
+
+  // Header bar
+  const topBar = h('div',{style:css({width:'100%',maxWidth:'760px',display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'32px',paddingBottom:'14px',borderBottom:`1px solid ${C.BORD}`})});
+  const greeting = h('div',{style:css({fontSize:'0.76rem',color:C.MUT})});
+  greeting.appendChild(document.createTextNode('Olá, '));
+  greeting.appendChild(h('strong',{style:css({color:C.A2})},state.me?.user||''));
+  const btns = h('div',{style:css({display:'flex',gap:'10px'})});
+  if(state.me?.role==='admin') btns.appendChild(btn('Admin',()=>{setState({amsg:{e:'',o:''},screen:'admin'});},{sm:true}));
+  btns.appendChild(btn('Sair',()=>setState({me:null,screen:'login',sit:'',res:null,err:'',lu:'',lp:'',linguagensSel:[]}),{sm:true}));
+  topBar.append(greeting,btns);
+
+  // Header
+  const header = h('header',{style:css({textAlign:'center',marginBottom:'40px'})});
+  const bigTitle=h('div',{style:css({fontFamily:C.serif,fontSize:'clamp(2rem,5.5vw,3.4rem)',fontWeight:'300',lineHeight:'1.1'})});
+  bigTitle.appendChild(document.createTextNode('Percepções & '));
+  bigTitle.appendChild(h('em',{style:css({color:C.A})},'Consciência'));
+  header.append(logo(),bigTitle,h('div',{style:css({color:C.MUT,fontSize:'0.82rem',letterSpacing:'0.14em',textTransform:'uppercase',marginTop:'10px'})},'Visão Sistêmica'));
+
+  const main = h('div',{style:css({width:'100%',maxWidth:'760px'})});
+
+  // Input card
+  const card = h('div',{style:css({background:C.SURF,border:`1px solid ${C.BORD}`,borderRadius:'4px',padding:'30px',marginBottom:'22px',position:'relative'})});
+  card.appendChild(h('div',{style:css({position:'absolute',top:0,left:0,right:0,height:'2px',background:`linear-gradient(90deg,transparent,${C.A},transparent)`,borderRadius:'4px 4px 0 0'})}));
+  card.appendChild(h('div',{style:css({fontSize:'0.75rem',letterSpacing:'0.18em',textTransform:'uppercase',color:C.A,marginBottom:'14px'})},'Descreva a situação em detalhes'));
+
+  const ta = h('textarea',{
+    id:'inp-sit',
+    placeholder:'Descreva livremente: a dinâmica familiar, os padrões, os vínculos, as emoções...',
+    style:css({width:'100%',background:C.BG2,border:`1px solid ${C.BORD}`,borderRadius:'3px',color:C.TXT,fontFamily:C.sans,fontSize:'1.05rem',lineHeight:'1.7',padding:'16px',resize:'vertical',minHeight:'130px',outline:'none'}),
+    onKeydown:e=>{if(e.key==='Enter'&&e.ctrlKey){e.preventDefault();gerar();}}
+  });
+  ta.value=state.sit;
+  card.appendChild(ta);
+
+  // Tags
+  card.appendChild(h('div',{style:css({fontSize:'0.65rem',letterSpacing:'0.16em',textTransform:'uppercase',color:C.MUT,margin:'16px 0 10px'})},'Atalhos rápidos'));
+  const tagsWrap=h('div',{style:css({display:'flex',flexWrap:'wrap',gap:'7px'})});
+  TAGS.forEach(([label,val])=>{
+    const tb=h('button',{
+      className:'tag-btn',
+      onClick:()=>{state.sit=val; const t=document.getElementById('inp-sit'); if(t){t.value=val;t.focus();}},
+      style:css({padding:'6px 12px',border:`1px solid ${C.BORD}`,borderRadius:'2px',fontSize:'0.75rem',color:C.MUT,cursor:'pointer',background:'transparent',fontFamily:C.sans,transition:'all 0.2s'})
+    },label);
+    tagsWrap.appendChild(tb);
+  });
+  card.appendChild(tagsWrap);
+
+  // Linguagens
+  card.appendChild(h('div',{style:css({marginTop:'22px',borderTop:`1px solid ${C.BORD}`,paddingTop:'20px'})}));
+  const lngHdr=h('div',{style:css({display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'})});
+  lngHdr.appendChild(h('div',{style:css({fontSize:'0.65rem',letterSpacing:'0.16em',textTransform:'uppercase',color:C.A})},'Eu preciso de:'));
+  const lngCount=state.linguagensSel.length;
+  lngHdr.appendChild(h('div',{style:css({fontSize:'0.62rem',color:C.MUT,fontStyle:'italic'})},lngCount===0?'Selecione até 3':lngCount===3?'Máximo atingido':`${lngCount} selecionada${lngCount>1?'s':''}`));
+  card.querySelector('div:last-child').appendChild(lngHdr);
+  const lngList=h('div',{style:css({display:'flex',flexDirection:'column',gap:'8px'})});
+  LINGUAGENS.forEach(l=>{
+    const sel=state.linguagensSel.includes(l.id);
+    const disabled=!sel&&state.linguagensSel.length>=3;
+    const lb=h('button',{
+      className:'lng-btn',
+      disabled,
+      onClick:()=>{
+        // Salva o texto digitado antes de re-renderizar
+        const t=document.getElementById('inp-sit');
+        if(t) state.sit=t.value;
+        setState(s=>{
+          const prev=s.linguagensSel;
+          const next=prev.includes(l.id)?prev.filter(x=>x!==l.id):prev.length>=3?prev:[...prev,l.id];
+          return {linguagensSel:next};
+        });
+      },
+      style:css({display:'flex',alignItems:'center',gap:'14px',background:sel?'rgba(201,169,110,0.05)':'transparent',border:`1px solid ${sel?l.cor:C.BORD}`,borderLeft:`3px solid ${sel?l.cor:'transparent'}`,borderRadius:'0 3px 3px 0',padding:'12px 16px',cursor:disabled?'not-allowed':'pointer',opacity:disabled?0.35:1,transition:'all 0.2s',textAlign:'left',fontFamily:C.sans})
+    });
+    const chk=h('div',{style:css({width:'16px',height:'16px',borderRadius:'2px',flexShrink:'0',border:`1px solid ${sel?l.cor:C.BORD}`,background:sel?l.cor+'28':'transparent',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.2s'})});
+    if(sel) chk.appendChild(h('div',{style:css({width:'7px',height:'7px',borderRadius:'1px',background:l.cor})}));
+    lb.appendChild(chk);
+    lb.appendChild(h('span',{style:css({fontSize:'0.92rem',color:sel?C.TXT:C.MUT,fontFamily:C.serif,fontStyle:'italic',transition:'color 0.2s'})},l.opcao));
+    if(sel) lb.appendChild(h('span',{style:css({marginLeft:'auto',fontSize:'0.65rem',letterSpacing:'0.12em',textTransform:'uppercase',color:l.cor,opacity:'0.85',flexShrink:'0'})},l.nome));
+    lngList.appendChild(lb);
+  });
+  card.querySelector('div:last-child').appendChild(lngList);
+
+  // Gerar btn
+  const gerarBtn=h('button',{
+    disabled:state.busy,
+    onClick:gerar,
+    style:css({width:'100%',marginTop:'22px',padding:'17px',background:'transparent',border:`1px solid ${C.A}`,color:C.A,fontFamily:C.sans,fontSize:'0.8rem',letterSpacing:'0.2em',textTransform:'uppercase',cursor:state.busy?'not-allowed':'pointer',borderRadius:'3px',display:'flex',alignItems:'center',justifyContent:'center',gap:'12px',opacity:state.busy?0.7:1})
+  });
+  if(state.busy){gerarBtn.appendChild(spin());gerarBtn.appendChild(document.createTextNode('Analisando...'))}
+  else gerarBtn.appendChild(document.createTextNode('Analisar e Gerar Percepções'));
+  card.appendChild(gerarBtn);
+  main.appendChild(card);
+
+  // Status
+  if(state.busy) main.appendChild(h('div',{style:css({display:'flex',alignItems:'center',gap:'12px',marginBottom:'20px',padding:'14px 20px',background:C.SURF,border:`1px solid ${C.BORD}`,borderLeft:`3px solid ${C.A2}`,borderRadius:'0 3px 3px 0',fontSize:'0.85rem',color:C.A2,fontStyle:'italic'})},'Analisando a dinâmica sistêmica • • •'));
+  if(state.err) main.appendChild(h('div',{style:css({padding:'20px 24px',background:'rgba(200,80,80,0.08)',border:'1px solid rgba(200,80,80,0.25)',borderRadius:'3px',color:'#e08080',fontSize:'0.9rem',lineHeight:'1.6',marginBottom:'22px'})},'⚠ '+state.err));
+
+  // Results
+  if(state.res) main.appendChild(renderResults());
+
+  if(!state.res&&!state.err&&!state.busy){
+    main.appendChild(h('div',{style:css({textAlign:'center',padding:'60px 20px',color:C.MUT})},
+      h('div',{style:css({fontSize:'1.8rem',marginBottom:'14px',opacity:'0.15'})},'◇'),
+      h('div',{style:css({fontFamily:C.serif,fontStyle:'italic',fontSize:'1.15rem',lineHeight:'1.8'})},'Descreva a situação acima para gerar percepções sistêmicas')
+    ));
+  }
+
+  // Toast
+  const toast=h('div',{style:css({position:'fixed',bottom:'22px',left:'50%',transform:`translateX(-50%) translateY(${state.toast?'0':'80px'})`,background:C.A,color:C.BG,padding:'10px 22px',borderRadius:'3px',fontSize:'0.78rem',letterSpacing:'0.12em',transition:'transform 0.3s ease',zIndex:'200',pointerEvents:'none'})},'Frase copiada');
+
+  wrap.append(topBar,header,main,toast);
+  return wrap;
+}
+
+function renderResults() {
+  const res=state.res;
+  const dinInfo=res.dinamica?(DINAMICAS.find(d=>d.nome===res.dinamica)||{nome:res.dinamica,desc:''}):null;
+  const leiInfo=res.lei?(LEIS.find(l=>l.nome===res.lei)||{nome:res.lei,desc:''}):null;
+  const feridasInfo=res.feridas?.length>0?res.feridas.map(f=>FERIDAS.find(x=>x.nome===f)).filter(Boolean):null;
+  const origemInfo=res.origem?(ORIGENS.find(o=>o.nome===res.origem)||null):null;
+  const exIcons=["◈","◉","◎","◇","◆"];
+
+  const wrap=h('div',{className:'fade-up'});
+
+  if(dinInfo) wrap.appendChild(infoBox({label:'Dinâmica Sistêmica',bg:'linear-gradient(135deg,#0d1a1f,#0a1518)',bgLabel:'#0d1a1f',bColor:C.A2,tColor:C.A2,nome:dinInfo.nome,desc:dinInfo.desc}));
+
+  if(res.reflexao){
+    const rb=h('div',{style:css({background:'linear-gradient(135deg,#1a1a2a,#141420)',border:`1px solid ${C.BORD}`,borderTop:'2px solid rgba(201,169,110,0.4)',padding:'26px 28px',marginBottom:'16px',borderRadius:'3px',position:'relative'})});
+    rb.appendChild(h('div',{style:css({position:'absolute',top:'-10px',left:'22px',background:'#141420',padding:'0 10px',fontSize:'0.65rem',letterSpacing:'0.22em',textTransform:'uppercase',color:C.A})},'Leitura Sistêmica'));
+    rb.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.15rem',lineHeight:'1.85',color:'rgba(232,228,220,0.78)',fontStyle:'italic'})},res.reflexao));
+    wrap.appendChild(rb);
+  }
+
+  if(leiInfo) wrap.appendChild(infoBox({label:'Lei Sistêmica',bg:'linear-gradient(135deg,#0f1a12,#0c1510)',bgLabel:'#0f1a12',bColor:C.A3,tColor:C.A3,nome:leiInfo.nome,desc:leiInfo.desc}));
+
+  if(feridasInfo&&feridasInfo.length>0){
+    const f0=feridasInfo[0];
+    const fb=h('div',{style:css({background:feridasInfo.length===1?f0.bg:'linear-gradient(135deg,#1a0f1a,#110b11)',border:`1px solid ${f0.cor}30`,borderTop:`2px solid ${f0.cor}`,borderRadius:'3px',padding:'24px 28px',marginBottom:'16px',position:'relative'})});
+    fb.appendChild(h('div',{style:css({position:'absolute',top:'-10px',left:'22px',background:feridasInfo.length===1?f0.bgLabel:'#1a0f1a',padding:'0 10px',fontSize:'0.65rem',letterSpacing:'0.22em',textTransform:'uppercase',color:f0.cor})},'Feridas Emocionais'));
+    if(feridasInfo.length===1){
+      fb.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.35rem',color:C.TXT,marginBottom:'10px'})},f0.nome));
+      fb.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.08rem',lineHeight:'1.8',color:'rgba(232,228,220,0.6)',fontStyle:'italic'})},f0.desc));
+    } else {
+      feridasInfo.forEach(f=>{
+        const row=h('div',{style:css({display:'flex',gap:'16px',alignItems:'flex-start',marginBottom:'12px'})});
+        const dot=h('div',{style:css({flexShrink:'0',marginTop:'6px'})},h('div',{style:css({width:'8px',height:'8px',borderRadius:'50%',background:f.cor,opacity:'0.8'})}));
+        const txt=h('div');
+        txt.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.2rem',color:f.cor,marginBottom:'4px'})},f.nome));
+        txt.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1rem',lineHeight:'1.75',color:'rgba(232,228,220,0.55)',fontStyle:'italic'})},f.desc));
+        row.append(dot,txt); fb.appendChild(row);
+      });
+    }
+    wrap.appendChild(fb);
+  }
+
+  if(origemInfo){
+    const ob=h('div',{style:css({background:origemInfo.bg,border:`1px solid ${origemInfo.cor}28`,borderTop:`2px solid ${origemInfo.cor}`,borderRadius:'3px',padding:'24px 28px',marginBottom:'16px',position:'relative'})});
+    ob.appendChild(h('div',{style:css({position:'absolute',top:'-10px',left:'22px',background:origemInfo.bgLabel,padding:'0 10px',fontSize:'0.65rem',letterSpacing:'0.22em',textTransform:'uppercase',color:origemInfo.cor})},'Origens Sistêmicas do Sofrimento'));
+    ob.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.35rem',color:C.TXT,marginBottom:'10px'})},origemInfo.nome));
+    ob.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.05rem',lineHeight:'1.8',color:'rgba(232,228,220,0.58)',fontStyle:'italic',marginBottom:'18px'})},origemInfo.desc));
+    const pills=h('div',{style:css({display:'flex',flexWrap:'wrap',gap:'8px',marginBottom:'16px'})});
+    origemInfo.sintomas.forEach(s=>pills.appendChild(h('span',{style:css({fontSize:'0.72rem',letterSpacing:'0.1em',color:origemInfo.cor,opacity:'0.75',padding:'4px 11px',border:`1px solid ${origemInfo.cor}30`,borderRadius:'2px',fontFamily:C.sans})},`– ${s}`)));
+    ob.appendChild(pills);
+    const raizRow=h('div',{style:css({display:'flex',alignItems:'flex-start',gap:'10px',padding:'11px 15px',background:'rgba(0,0,0,0.2)',borderRadius:'2px',borderLeft:`2px solid ${origemInfo.cor}50`})});
+    raizRow.appendChild(h('span',{style:css({fontSize:'0.6rem',letterSpacing:'0.18em',textTransform:'uppercase',color:origemInfo.cor,flexShrink:'0',marginTop:'2px',opacity:'0.8'})},'Raiz'));
+    raizRow.appendChild(h('span',{style:css({fontFamily:C.serif,fontSize:'0.98rem',lineHeight:'1.65',color:'rgba(232,228,220,0.5)',fontStyle:'italic'})},origemInfo.raiz));
+    ob.appendChild(raizRow); wrap.appendChild(ob);
+  }
+
+  // Investigação
+  if(res.investigacao&&res.investigacao.length>0){
+    const ib=h('div',{style:css({background:'linear-gradient(135deg,#0f0d1a,#0c0a14)',border:'1px solid rgba(184,168,216,0.22)',borderTop:'2px solid #b8a8d8',borderRadius:'3px',padding:'24px 28px',marginBottom:'16px',position:'relative'})});
+    ib.appendChild(h('div',{style:css({position:'absolute',top:'-10px',left:'22px',background:'#0f0d1a',padding:'0 10px',fontSize:'0.65rem',letterSpacing:'0.22em',textTransform:'uppercase',color:'#b8a8d8'})},'Investigação para Reconhecer o que Precisa ser Visto'));
+    ib.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1rem',lineHeight:'1.7',color:'rgba(184,168,216,0.5)',fontStyle:'italic',marginBottom:'22px',marginTop:'4px'})},'O que pede lugar. O que ainda não foi visto.'));
+    res.investigacao.forEach((q,qi)=>{
+      const row=h('div',{style:css({display:'flex',gap:'16px',alignItems:'flex-start',background:'rgba(184,168,216,0.04)',border:'1px solid rgba(184,168,216,0.18)',borderLeft:'3px solid rgba(184,168,216,0.55)',borderRadius:'0 3px 3px 0',padding:'16px 20px',marginBottom:'10px'})});
+      row.appendChild(h('div',{style:css({flexShrink:'0',fontFamily:C.serif,fontSize:'1.4rem',color:'rgba(184,168,216,0.4)',lineHeight:'1',marginTop:'2px'})},'①②③④⑤'[qi]||String(qi+1)));
+      const qBody=h('div',{style:css({flex:'1'})});
+      const qHdr=h('div',{style:css({display:'flex',alignItems:'baseline',gap:'10px',marginBottom:'6px',flexWrap:'wrap'})});
+      qHdr.appendChild(h('div',{style:css({fontFamily:C.sans,fontSize:'0.68rem',letterSpacing:'0.18em',textTransform:'uppercase',color:'#b8a8d8',opacity:'0.9'})},q.tema));
+      qHdr.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'0.82rem',fontStyle:'italic',color:'rgba(184,168,216,0.55)'})},'— '+q.subtema));
+      qBody.append(qHdr,h('div',{style:css({fontFamily:C.serif,fontSize:'1.12rem',fontStyle:'italic',lineHeight:'1.7',color:'rgba(232,228,220,0.88)'})},'\"'+q.pergunta+'\"'));
+      row.appendChild(qBody); ib.appendChild(row);
+    });
+    wrap.appendChild(ib);
+  }
+
+  // Linguagens do amor
+  if(state.linguagensSel.length>0){
+    const sels=LINGUAGENS.filter(l=>state.linguagensSel.includes(l.id));
+    const lb=h('div',{style:css({background:'linear-gradient(135deg,#12100a,#0d0c08)',border:`1px solid ${sels[0].cor}28`,borderTop:`2px solid ${sels[0].cor}`,borderRadius:'3px',padding:'24px 28px',marginBottom:'16px',position:'relative'})});
+    lb.appendChild(h('div',{style:css({position:'absolute',top:'-10px',left:'22px',background:'#12100a',padding:'0 10px',fontSize:'0.65rem',letterSpacing:'0.22em',textTransform:'uppercase',color:sels[0].cor})},'Linguagens do Amor'));
+    sels.forEach((l,li)=>{
+      const section=h('div',{style:css({paddingTop:li>0?'22px':'0',borderTop:li>0?'1px solid rgba(255,255,255,0.05)':'none'})});
+      const nm=h('div',{style:css({display:'flex',alignItems:'center',gap:'10px',marginBottom:'10px'})});
+      nm.appendChild(h('div',{style:css({width:'6px',height:'6px',borderRadius:'50%',background:l.cor,flexShrink:'0'})}));
+      nm.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.3rem',color:C.TXT,fontWeight:'300'})},l.nome));
+      section.appendChild(nm);
+      l.frases.forEach(fr=>section.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.05rem',fontStyle:'italic',color:'rgba(232,228,220,0.65)',lineHeight:'1.6',paddingLeft:'16px',marginBottom:'6px'})},`"${fr}"`)));
+      const pr=h('div',{style:css({display:'flex',flexWrap:'wrap',gap:'7px',marginBottom:'12px',paddingLeft:'16px'})});
+      l.raizes.forEach(r=>pr.appendChild(h('span',{style:css({fontSize:'0.7rem',letterSpacing:'0.09em',color:l.cor,opacity:'0.7',padding:'3px 10px',border:`1px solid ${l.cor}28`,borderRadius:'2px',fontFamily:C.sans})},`– ${r}`)));
+      section.appendChild(pr);
+      section.appendChild(h('div',{style:css({paddingLeft:'16px',marginBottom:li<sels.length-1?'0':'0'})},h('div',{style:css({display:'inline-flex',padding:'8px 14px',background:'rgba(0,0,0,0.25)',borderRadius:'2px',borderLeft:`2px solid ${l.cor}45`})},h('span',{style:css({fontFamily:C.serif,fontSize:'0.92rem',lineHeight:'1.6',color:'rgba(232,228,220,0.45)',fontStyle:'italic'})},l.frase_chave))));
+      lb.appendChild(section);
+    });
+    wrap.appendChild(lb);
+  }
+
+  // Categorias / frases
+  if(res.categorias&&res.categorias.length>0){
+    const catWrap=h('div',{style:css({marginTop:'12px'})});
+    res.categorias.forEach((cat,ci)=>{
+      const catDiv=h('div',{style:css({marginBottom:'30px'})});
+      const catHdr=h('div',{style:css({display:'flex',alignItems:'center',gap:'14px',marginBottom:'18px'})});
+      catHdr.appendChild(h('div',{style:css({fontSize:'0.7rem',letterSpacing:'0.2em',textTransform:'uppercase',color:C.A2,padding:'5px 12px',border:'1px solid rgba(143,168,200,0.3)',borderRadius:'2px',whiteSpace:'nowrap'})},cat.nome));
+      catHdr.appendChild(h('div',{style:css({flex:'1',height:'1px',background:C.BORD})}));
+      catDiv.appendChild(catHdr);
+      (cat.frases||[]).forEach((f,fi)=>{
+        const id=`${ci}-${fi}`;
+        const fDiv=h('div',{style:css({background:C.SURF,border:`1px solid ${C.BORD}`,borderLeft:`3px solid ${state.cp===id?'#6ec99a':C.A}`,padding:'22px 60px 22px 26px',marginBottom:'12px',borderRadius:'0 3px 3px 0',position:'relative'})});
+        fDiv.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.28rem',fontWeight:'300',fontStyle:'italic',lineHeight:'1.6'})},`"${f.texto}"`));
+        const meta=h('div',{style:css({display:'flex',alignItems:'center',gap:'14px',marginTop:'10px',flexWrap:'wrap'})});
+        if(f.especialista) meta.appendChild(h('div',{style:css({fontSize:'0.7rem',color:'rgba(201,169,110,0.55)',fontStyle:'italic'})},`— ${f.especialista}`));
+        if(f.contexto) meta.appendChild(h('div',{style:css({fontSize:'0.68rem',letterSpacing:'0.1em',color:C.MUT,marginTop:'3px'})},f.contexto));
+        fDiv.appendChild(meta);
+        fDiv.appendChild(h('button',{
+          onClick:e=>{e.stopPropagation();copy(f.texto,id);},
+          style:css({position:'absolute',right:'14px',top:'50%',transform:'translateY(-50%)',background:'transparent',border:`1px solid ${C.BORD}`,color:C.MUT,fontSize:'0.62rem',letterSpacing:'0.1em',padding:'5px 9px',borderRadius:'2px',cursor:'pointer',fontFamily:C.sans,textTransform:'uppercase'})
+        },'copiar'));
+        catDiv.appendChild(fDiv);
+      });
+      catWrap.appendChild(catDiv);
+    });
+    wrap.appendChild(catWrap);
+  }
+
+  // Exercícios
+  if(res.exercicios&&res.exercicios.length>0){
+    const exSection=h('div',{style:css({marginTop:'28px',marginBottom:'10px'})});
+    const exHdr=h('div',{style:css({display:'flex',alignItems:'center',gap:'14px',marginBottom:'22px'})});
+    exHdr.appendChild(h('div',{style:css({flex:'1',height:'1px',background:C.BORD})}));
+    exHdr.appendChild(h('div',{style:css({fontSize:'0.65rem',letterSpacing:'0.26em',textTransform:'uppercase',color:'rgba(168,200,160,0.7)',padding:'5px 14px',border:'1px solid rgba(168,200,160,0.2)',borderRadius:'2px',whiteSpace:'nowrap'})},'Práticas & Exercícios'));
+    exHdr.appendChild(h('div',{style:css({flex:'1',height:'1px',background:C.BORD})}));
+    exSection.appendChild(exHdr);
+    const exBox=h('div',{style:css({background:'linear-gradient(135deg,#0e1a10,#0b1510)',border:'1px solid rgba(168,200,160,0.18)',borderTop:`2px solid ${C.A3}`,borderRadius:'4px',padding:'26px 28px',position:'relative',marginBottom:'8px'})});
+    exBox.appendChild(h('div',{style:css({position:'absolute',top:'-11px',left:'22px',background:'#0e1a10',padding:'0 12px',fontSize:'0.62rem',letterSpacing:'0.24em',textTransform:'uppercase',color:C.A3})},'Exercícios de Ressignificação · Inclusão · Reparação'));
+    exBox.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1rem',lineHeight:'1.8',color:'rgba(168,200,160,0.55)',fontStyle:'italic',marginBottom:'22px',marginTop:'4px'})},'Para que o que ficou parado possa se mover. Para que a vida flua.'));
+    res.exercicios.forEach((ex,ei)=>{
+      const isSens=ex.sensorial===true;
+      const exCor=isSens?'#c8a8d8':'rgba(168,200,160,1)';
+      const exCorL=isSens?'rgba(200,168,216,':'rgba(168,200,160,';
+      const exDiv=h('div',{style:css({marginBottom:ei<res.exercicios.length-1?'14px':'0'})});
+      if(isSens){
+        const sensHdr=h('div',{style:css({display:'flex',alignItems:'center',gap:'10px',margin:'18px 0 10px'})});
+        sensHdr.appendChild(h('div',{style:css({flex:'1',height:'1px',background:'rgba(200,168,216,0.15)'})}));
+        sensHdr.appendChild(h('div',{style:css({fontSize:'0.6rem',letterSpacing:'0.2em',textTransform:'uppercase',color:'rgba(200,168,216,0.6)',padding:'4px 12px',border:'1px solid rgba(200,168,216,0.2)',borderRadius:'2px',whiteSpace:'nowrap',flexShrink:'0'})},'✦ Exercício Sensorial · O que Cura'));
+        sensHdr.appendChild(h('div',{style:css({flex:'1',height:'1px',background:'rgba(200,168,216,0.15)'})}));
+        exDiv.appendChild(sensHdr);
+      }
+      const isOpen=!!state.exOpen[ei];
+      const exBtn=h('button',{
+        onClick:()=>setState(s=>({exOpen:{...s.exOpen,[ei]:!s.exOpen[ei]}})),
+        style:css({width:'100%',background:isOpen?`${exCorL}0.06)`:`${exCorL}0.03)`,border:`1px solid ${exCorL}${isOpen?'0.22)':'0.12)'}`,borderLeft:`3px solid ${exCor}`,borderRadius:'0 3px 3px 0',padding:'16px 20px',cursor:'pointer',display:'flex',alignItems:'center',gap:'14px',textAlign:'left',transition:'all 0.25s',fontFamily:C.sans})
+      });
+      exBtn.appendChild(h('span',{style:css({fontSize:'1rem',color:exCor,opacity:'0.7',flexShrink:'0'})},isSens?'✦':exIcons[ei%exIcons.length]));
+      exBtn.appendChild(h('span',{style:css({fontFamily:C.serif,fontSize:'1.18rem',color:C.TXT,fontWeight:'300',flex:'1',lineHeight:'1.3'})},ex.titulo));
+      exBtn.appendChild(h('span',{style:css({fontSize:'0.75rem',color:exCor,opacity:'0.6',flexShrink:'0',display:'inline-block',transform:isOpen?'rotate(180deg)':'rotate(0deg)',transition:'transform 0.25s'})},'▾'));
+      exDiv.appendChild(exBtn);
+      if(isOpen){
+        const exBody=h('div',{className:'ex-body',style:css({background:`${exCorL}0.04)`,border:`1px solid ${exCorL}0.12)`,borderTop:'none',borderLeft:`3px solid ${exCorL}0.3)`,borderRadius:'0 0 3px 0',padding:'20px 24px 22px'})});
+        exBody.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.08rem',lineHeight:'1.85',color:'rgba(232,228,220,0.82)',marginBottom:'16px'})},ex.descricao));
+        const int=h('div',{style:css({display:'flex',alignItems:'flex-start',gap:'10px',padding:'12px 16px',background:`${exCorL}0.06)`,borderRadius:'2px',border:`1px solid ${exCorL}0.1)`})});
+        int.appendChild(h('span',{style:css({fontSize:'0.62rem',letterSpacing:'0.2em',textTransform:'uppercase',color:exCor,flexShrink:'0',marginTop:'2px'})},'Intenção'));
+        int.appendChild(h('span',{style:css({fontFamily:C.serif,fontSize:'1rem',lineHeight:'1.7',color:`${exCorL}0.75)`,fontStyle:'italic'})},ex.intencao));
+        exBody.appendChild(int); exDiv.appendChild(exBody);
+      }
+      exBox.appendChild(exDiv);
+    });
+    exSection.appendChild(exBox);
+    wrap.appendChild(exSection);
+  }
+
+  // Músicas
+  if(res.musica_nac||res.musica_int){
+    const MUS_COR='#9b8fc8';
+    const resolve=(field,pool)=>{if(!field)return null;return pool.find(m=>m.id===field.id)||pool[0];};
+    const mNac=resolve(res.musica_nac,MUSICAS_NAC);
+    const mInt=resolve(res.musica_int,MUSICAS_INT);
+    const musBox=h('div',{style:css({background:'linear-gradient(135deg,#130f1e,#0e0b18)',border:'1px solid '+MUS_COR+'28',borderTop:'2px solid '+MUS_COR,borderRadius:'3px',padding:'24px 28px',marginBottom:'16px',position:'relative'})});
+    musBox.appendChild(h('div',{style:css({position:'absolute',top:'-10px',left:'22px',background:'#130f1e',padding:'0 10px',fontSize:'0.65rem',letterSpacing:'0.22em',textTransform:'uppercase',color:MUS_COR})},'Músicas Sistêmicas'));
+    const musRow=h('div',{style:css({display:'flex',gap:'24px',flexWrap:'wrap',marginTop:'4px'})});
+    function musicCard(m,motivo,label){
+      const card=h('div',{style:css({flex:'1',minWidth:'240px'})});
+      card.appendChild(h('div',{style:css({fontSize:'0.6rem',letterSpacing:'0.2em',textTransform:'uppercase',color:MUS_COR,opacity:'0.6',marginBottom:'8px'})},label));
+      card.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'1.15rem',color:C.TXT,fontWeight:'300',marginBottom:'2px'})},m.titulo));
+      card.appendChild(h('div',{style:css({fontSize:'0.75rem',letterSpacing:'0.08em',color:MUS_COR,opacity:'0.75',marginBottom:'10px'})},m.artista));
+      if(motivo) card.appendChild(h('div',{style:css({fontFamily:C.serif,fontSize:'0.88rem',lineHeight:'1.6',color:'rgba(232,228,220,0.45)',fontStyle:'italic',marginBottom:'12px'})},motivo));
+      const lnk=h('a',{href:`https://www.youtube.com/watch?v=${m.youtube_id}`,target:'_blank',rel:'noopener noreferrer',style:css({textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'8px',padding:'9px 16px',background:'rgba(155,143,200,0.07)',border:'1px solid '+MUS_COR+'40',borderRadius:'3px',cursor:'pointer'})});
+      const playBtn=h('div',{style:css({width:'28px',height:'28px',borderRadius:'50%',background:'rgba(155,143,200,0.12)',border:'1px solid '+MUS_COR,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:'0'})});
+      playBtn.innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="${MUS_COR}"><polygon points="6,3 20,12 6,21"/></svg>`;
+      lnk.append(playBtn,h('span',{style:css({fontFamily:C.sans,fontSize:'0.62rem',letterSpacing:'0.16em',textTransform:'uppercase',color:MUS_COR,opacity:'0.8'})},'Ouvir no YouTube'));
+      card.appendChild(lnk); return card;
+    }
+    if(mNac) musRow.appendChild(musicCard(mNac,res.musica_nac?.motivo,'Nacional'));
+    if(mNac&&mInt) musRow.appendChild(h('div',{style:css({width:'1px',background:MUS_COR+'20',alignSelf:'stretch',flexShrink:'0'})}));
+    if(mInt) musRow.appendChild(musicCard(mInt,res.musica_int?.motivo,'Internacional'));
+    musBox.appendChild(musRow); wrap.appendChild(musBox);
+  }
+
+  return wrap;
+}
+
+// ─── MAIN RENDER ─────────────────────────────────────────────────────────────
+function render() {
+  const root=document.getElementById('root');
+  root.innerHTML='';
+  if(state.screen==='login') root.appendChild(renderLogin());
+  else if(state.screen==='admin') root.appendChild(renderAdmin());
+  else root.appendChild(renderApp());
+}
+
+render();
+</script>
+</body>
+</html>

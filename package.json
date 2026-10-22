@@ -1,0 +1,43 @@
+{
+  "name": "percepcoes-consciencia",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Percepções & Consciência — análise sistêmica assistida por IA",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "predev": "node scripts/check-node.mjs",
+    "predev:api": "node scripts/check-node.mjs",
+    "predev:web": "node scripts/check-node.mjs",
+    "prestart": "node scripts/check-node.mjs",
+    "dev": "npm run dev --workspace=@percepcoes/api & npm run dev --workspace=@percepcoes/web & wait",
+    "dev:api": "npm run dev --workspace=@percepcoes/api",
+    "dev:web": "npm run dev --workspace=@percepcoes/web",
+    "build": "npm run build --workspace=@percepcoes/web && npm run build --workspace=@percepcoes/api",
+    "start": "npm run start --workspace=@percepcoes/api",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.71.2"
+  },
+  "allowScripts": {
+    "better-sqlite3": true,
+    "esbuild": true,
+    "fsevents": false
+  }
+}

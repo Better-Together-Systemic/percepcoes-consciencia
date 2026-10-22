@@ -1,0 +1,18 @@
+.toast {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  z-index: 200;
+  padding: 10px 22px;
+  background: var(--color-gold);
+  color: var(--color-bg);
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  transform: translate(-50%, 80px);
+  transition: transform 0.3s ease;
+}
+.visible {
+  transform: translate(-50%, 0);
+}
